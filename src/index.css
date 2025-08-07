@@ -1,0 +1,112 @@
+html {
+  scroll-behavior: smooth;
+}
+
+:root {
+  --primary: #824389;
+  --primary-100: #ecf7f3;
+  --primary-900: #31b151;
+  --primary-foreground: #ffffff;
+  --light-primary: #8d80cb;
+  --light-primary-transparent: #82c341e5;
+  --primary-transparent: #2ba149e5;
+  --text-main: #161439;
+  --text-secondary: #6d6c80;
+}
+
+body,
+html,
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+@layer utilities {
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  .scroll-bar-hidden::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Hide scrollbar for IE, Edge and Firefox */
+  .scroll-bar-hidden {
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+  }
+  .scroll-bar-minimal::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  .scroll-bar-minimal::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scroll-bar-minimal::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 20px;
+  }
+
+  .scroll-bar-minimal::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+}
+
+@layer base {
+  .font-outline-1 {
+    -webkit-text-stroke: 0.4px #2eae7d;
+  }
+  .font-outline-2 {
+    -webkit-text-stroke: 2px #2eae7d;
+  }
+  .font-outline-4 {
+    -webkit-text-stroke: 4px #2eae7d;
+  }
+}
+
+.prose li {
+  list-style-type: disc; /* Apply bullet style */
+  margin-left: 20px; /* Add padding to align bullets */
+}
+.prose p {
+  margin: 0 5px;
+}
+.prose ul {
+  margin: 0 5px;
+}
+
+.ProseMirror {
+  padding: 10px;
+  /* height: 150px; */
+  min-height: 150px;
+  /* overflow: scroll; */
+  outline: none;
+  border: 1px solid transparent;
+}
+
+.ProseMirror:focus {
+  /* outline: 2px solid var(--primary); */
+  border: 1px solid var(--primary);
+}
+
+.ProseMirror::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.ProseMirror {
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
+}
+
+.sidebar-background {
+  background: linear-gradient(to bottom, #3E337C, #018DAF 90%);
+}
+
+.login-page-background {
+  background: linear-gradient(to left, #A8394B, #022F95, #018DAF, #fff 80%);
+}

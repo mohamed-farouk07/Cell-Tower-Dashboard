@@ -1,0 +1,48 @@
+// Colors
+$primary-color: #3E337C;
+$secondary-color: #A8394B;
+$tertiary-color: #018DAF;
+$dark-blue: #022F95;
+$white: #fff;
+$light-gray: #e0e0e0;
+$error-color: #f44336;
+$success-color: #4caf50;
+
+// Gradients
+$background-gradient: linear-gradient(to right, $white, $secondary-color, $dark-blue, $tertiary-color, $white 90%);
+$header-gradient: linear-gradient(to right, $secondary-color, $primary-color);
+$text-gradient: linear-gradient(to right, $primary-color, $tertiary-color);
+
+// Shadows
+$box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+$input-shadow: 0 0 0 2px rgba($primary-color, 0.2);
+
+// Spacing
+$spacing-xs: 4px;
+$spacing-sm: 8px;
+$spacing-md: 16px;
+$spacing-lg: 24px;
+$spacing-xl: 32px;
+$spacing-xxl: 40px;
+
+// Border
+$border-radius-sm: 2px;
+$border-radius-md: 4px;
+$border-radius-lg: 8px;
+
+// Typography
+$font-size-sm: 14px;
+$font-size-md: 16px;
+$font-size-lg: 20px;
+$font-size-xl: 24px;
+$font-size-xxl: 32px;
+
+// Transitions
+$transition-fast: 0.2s;
+$transition-medium: 0.3s;
+$transition-slow: 0.5s;
+
+// Z-index
+$z-index-low: 10;
+$z-index-medium: 100;
+$z-index-high: 1000;

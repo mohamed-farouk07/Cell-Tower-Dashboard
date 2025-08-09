@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import {
-  BrowserRouter as Router,
+  HashRouter as Router,
   Routes,
   Route,
   useNavigate,
@@ -115,7 +115,7 @@ const App = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<LoginPage onLoginSuccess={checkAuth} />} />
+        <Route path="/login" element={<LoginPage onLoginSuccess={checkAuth} />} />
         <Route
           path="/*"
           element={

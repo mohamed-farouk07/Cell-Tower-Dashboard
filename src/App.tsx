@@ -1,9 +1,9 @@
 import { useState, useEffect, useCallback } from "react";
 import {
-  BrowserRouter as Router,
+  HashRouter as Router,
   Routes,
   Route,
-  Navigate,
+  useNavigate,
 } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import LoginPage from "./app/auth/LoginPage";
@@ -12,13 +12,29 @@ import Header from "./components/layout/Header/Header";
 import SideBar from "./components/layout/SideBar/SideBar";
 import "./styles/App.scss";
 
-interface AuthenticatedLayoutProps {
+const RouteGuard = ({
+  isAuthenticated,
+  children,
+}: {
+  isAuthenticated: boolean;
+  children: React.ReactNode;
+}) => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate("/login");
+    }
+  }, [isAuthenticated, navigate]);
+
+  return isAuthenticated ? <>{children}</> : null;
+};
+
+interface AuthenticatedRoutesProps {
   currentLanguage: string;
 }
 
-const AuthenticatedLayout: React.FC<AuthenticatedLayoutProps> = ({
-  currentLanguage,
-}) => {
+const AuthenticatedRoutes: React.FC<AuthenticatedRoutesProps> = ({ currentLanguage }) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
@@ -30,7 +46,6 @@ const AuthenticatedLayout: React.FC<AuthenticatedLayoutProps> = ({
         setIsCollapsed(true);
       }
     };
-
     window.addEventListener("resize", handleResize);
     handleResize();
     return () => window.removeEventListener("resize", handleResize);
@@ -54,28 +69,13 @@ const AuthenticatedLayout: React.FC<AuthenticatedLayoutProps> = ({
           <div className="content-wrapper">
             <Routes>
               <Route path="/dashboard" element={<DashboardPage />} />
-              <Route path="/" element={<Navigate to="/dashboard" replace />} />
-              <Route path="*" element={<Navigate to="/dashboard" replace />} />
+              <Route path="*" element={<DashboardPage />} />
             </Routes>
           </div>
         </div>
       </div>
     </div>
   );
-};
-
-// Protected Route Component
-const ProtectedRoute = ({
-  children,
-  isAuthenticated,
-}: {
-  children: React.ReactNode;
-  isAuthenticated: boolean;
-}) => {
-  if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
-  }
-  return <>{children}</>;
 };
 
 const App = () => {
@@ -94,16 +94,6 @@ const App = () => {
     return () => window.removeEventListener("storage", checkAuth);
   }, [checkAuth]);
 
-  // Remove the popstate prevention - it's causing issues
-  // useEffect(() => {
-  //   const handlePopState = () => {
-  //     window.history.pushState(null, "", window.location.href);
-  //   };
-  //   window.history.pushState(null, "", window.location.href);
-  //   window.addEventListener("popstate", handlePopState);
-  //   return () => window.removeEventListener("popstate", handlePopState);
-  // }, []);
-
   useEffect(() => {
     document.documentElement.dir = i18n.language === "ar" ? "rtl" : "ltr";
     document.documentElement.lang = i18n.language;
@@ -112,25 +102,13 @@ const App = () => {
   return (
     <Router>
       <Routes>
-        {/* Login Route */}
-        <Route
-          path="/login"
-          element={
-            isAuthenticated ? (
-              <Navigate to="/dashboard" replace />
-            ) : (
-              <LoginPage onLoginSuccess={checkAuth} />
-            )
-          }
-        />
-
-        {/* Protected Routes */}
+        <Route path="/login" element={<LoginPage onLoginSuccess={checkAuth} />} />
         <Route
           path="/*"
           element={
-            <ProtectedRoute isAuthenticated={isAuthenticated}>
-              <AuthenticatedLayout currentLanguage={i18n.language} />
-            </ProtectedRoute>
+            <RouteGuard isAuthenticated={isAuthenticated}>
+              <AuthenticatedRoutes currentLanguage={i18n.language} />
+            </RouteGuard>
           }
         />
       </Routes>

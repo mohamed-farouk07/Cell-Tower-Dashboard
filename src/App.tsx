@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import {
-  HashRouter as Router,
+  BrowserRouter as Router,
   Routes,
   Route,
   Navigate,
@@ -16,7 +16,9 @@ interface AuthenticatedLayoutProps {
   currentLanguage: string;
 }
 
-const AuthenticatedLayout: React.FC<AuthenticatedLayoutProps> = ({ currentLanguage }) => {
+const AuthenticatedLayout: React.FC<AuthenticatedLayoutProps> = ({
+  currentLanguage,
+}) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
@@ -29,13 +31,13 @@ const AuthenticatedLayout: React.FC<AuthenticatedLayoutProps> = ({ currentLangua
       }
     };
 
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
     handleResize();
-    return () => window.removeEventListener('resize', handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   const contentStyle = {
-    marginLeft: isMobile ? "60px" : (isCollapsed ? "60px" : "240px"),
+    marginLeft: isMobile ? "60px" : isCollapsed ? "60px" : "240px",
   };
 
   return (
@@ -48,10 +50,7 @@ const AuthenticatedLayout: React.FC<AuthenticatedLayoutProps> = ({ currentLangua
           currentLanguage={currentLanguage}
           isMobile={isMobile}
         />
-        <div 
-          className="main-content" 
-          style={contentStyle}
-        >
+        <div className="main-content" style={contentStyle}>
           <div className="content-wrapper">
             <Routes>
               <Route path="/dashboard" element={<DashboardPage />} />
@@ -66,12 +65,12 @@ const AuthenticatedLayout: React.FC<AuthenticatedLayoutProps> = ({ currentLangua
 };
 
 // Protected Route Component
-const ProtectedRoute = ({ 
-  children, 
-  isAuthenticated 
-}: { 
-  children: React.ReactNode; 
-  isAuthenticated: boolean 
+const ProtectedRoute = ({
+  children,
+  isAuthenticated,
+}: {
+  children: React.ReactNode;
+  isAuthenticated: boolean;
 }) => {
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
@@ -114,15 +113,17 @@ const App = () => {
     <Router>
       <Routes>
         {/* Login Route */}
-        <Route 
-          path="/login" 
+        <Route
+          path="/login"
           element={
-            isAuthenticated ? 
-            <Navigate to="/dashboard" replace /> : 
-            <LoginPage onLoginSuccess={checkAuth} />
-          } 
+            isAuthenticated ? (
+              <Navigate to="/dashboard" replace />
+            ) : (
+              <LoginPage onLoginSuccess={checkAuth} />
+            )
+          }
         />
-        
+
         {/* Protected Routes */}
         <Route
           path="/*"

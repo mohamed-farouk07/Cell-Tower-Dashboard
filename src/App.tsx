@@ -3,6 +3,7 @@ import {
   HashRouter as Router,
   Routes,
   Route,
+  Navigate,
   useNavigate,
 } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -12,31 +13,24 @@ import Header from "./components/layout/Header/Header";
 import SideBar from "./components/layout/SideBar/SideBar";
 import "./styles/App.scss";
 
-const RouteGuard = ({
-  isAuthenticated,
-  children,
-}: {
+interface AuthenticatedRoutesProps {
+  currentLanguage: string;
   isAuthenticated: boolean;
-  children: React.ReactNode;
+}
+
+const AuthenticatedRoutes: React.FC<AuthenticatedRoutesProps> = ({ 
+  currentLanguage, 
+  isAuthenticated 
 }) => {
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const navigate = useNavigate();
 
   useEffect(() => {
     if (!isAuthenticated) {
-      navigate("/login");
+      navigate("/");
     }
   }, [isAuthenticated, navigate]);
-
-  return isAuthenticated ? <>{children}</> : null;
-};
-
-interface AuthenticatedRoutesProps {
-  currentLanguage: string;
-}
-
-const AuthenticatedRoutes: React.FC<AuthenticatedRoutesProps> = ({ currentLanguage }) => {
-  const [isCollapsed, setIsCollapsed] = useState(false);
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
   useEffect(() => {
     const handleResize = () => {
@@ -46,14 +40,20 @@ const AuthenticatedRoutes: React.FC<AuthenticatedRoutesProps> = ({ currentLangua
         setIsCollapsed(true);
       }
     };
-    window.addEventListener("resize", handleResize);
+
+    window.addEventListener('resize', handleResize);
     handleResize();
-    return () => window.removeEventListener("resize", handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   const contentStyle = {
-    marginLeft: isMobile ? "60px" : isCollapsed ? "60px" : "240px",
+    marginLeft: isMobile ? "60px" : (isCollapsed ? "60px" : "240px"),
   };
+
+  // Don't render if not authenticated
+  if (!isAuthenticated) {
+    return null;
+  }
 
   return (
     <div className="app-layout">
@@ -65,11 +65,14 @@ const AuthenticatedRoutes: React.FC<AuthenticatedRoutesProps> = ({ currentLangua
           currentLanguage={currentLanguage}
           isMobile={isMobile}
         />
-        <div className="main-content" style={contentStyle}>
+        <div 
+          className="main-content" 
+          style={contentStyle}
+        >
           <div className="content-wrapper">
             <Routes>
               <Route path="/dashboard" element={<DashboardPage />} />
-              <Route path="*" element={<DashboardPage />} />
+              <Route path="*" element={<Navigate to="/dashboard" replace />} />
             </Routes>
           </div>
         </div>
@@ -79,13 +82,12 @@ const AuthenticatedRoutes: React.FC<AuthenticatedRoutesProps> = ({ currentLangua
 };
 
 const App = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(
-    !!localStorage.getItem("accessToken")
-  );
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const { i18n } = useTranslation();
 
   const checkAuth = useCallback(() => {
-    setIsAuthenticated(!!localStorage.getItem("accessToken"));
+    const token = localStorage.getItem("accessToken");
+    setIsAuthenticated(!!token);
   }, []);
 
   useEffect(() => {
@@ -95,6 +97,15 @@ const App = () => {
   }, [checkAuth]);
 
   useEffect(() => {
+    const handlePopState = () => {
+      window.history.pushState(null, "", window.location.href);
+    };
+    window.history.pushState(null, "", window.location.href);
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
+  }, []);
+
+  useEffect(() => {
     document.documentElement.dir = i18n.language === "ar" ? "rtl" : "ltr";
     document.documentElement.lang = i18n.language;
   }, [i18n.language]);
@@ -102,13 +113,39 @@ const App = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/login" element={<LoginPage onLoginSuccess={checkAuth} />} />
-        <Route
-          path="/*"
+        <Route 
+          path="/" 
           element={
-            <RouteGuard isAuthenticated={isAuthenticated}>
-              <AuthenticatedRoutes currentLanguage={i18n.language} />
-            </RouteGuard>
+            isAuthenticated ? 
+              <Navigate to="/dashboard" replace /> : 
+              <LoginPage onLoginSuccess={checkAuth} />
+          } 
+        />
+        <Route 
+          path="/login" 
+          element={
+            isAuthenticated ? 
+              <Navigate to="/dashboard" replace /> : 
+              <LoginPage onLoginSuccess={checkAuth} />
+          } 
+        />
+        <Route
+          path="/dashboard"
+          element={
+            isAuthenticated ? 
+              <AuthenticatedRoutes 
+                currentLanguage={i18n.language} 
+                isAuthenticated={isAuthenticated}
+              /> : 
+              <Navigate to="/" replace />
+          }
+        />
+        <Route
+          path="*"
+          element={
+            isAuthenticated ? 
+              <Navigate to="/dashboard" replace /> : 
+              <Navigate to="/" replace />
           }
         />
       </Routes>

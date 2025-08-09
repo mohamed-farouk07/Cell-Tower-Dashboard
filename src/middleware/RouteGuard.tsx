@@ -11,7 +11,7 @@ const RouteGuard: React.FC<RouteGuardProps> = ({ children, isAuthenticated }) =>
 
   if (!isAuthenticated) {
     // Save the attempted location for potential redirect after login
-    return <Navigate to="/login" state={{ from: location }} replace />;
+    return <Navigate to="/" state={{ from: location }} replace />;
   }
 
   return <>{children}</>;

@@ -115,7 +115,7 @@ const App = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<LoginPage onLoginSuccess={checkAuth} />} />
+        <Route path="/login" element={<LoginPage onLoginSuccess={checkAuth} />} />
         <Route
           path="/*"
           element={

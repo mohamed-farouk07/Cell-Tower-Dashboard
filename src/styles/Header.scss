@@ -1,0 +1,180 @@
+.app-header {
+    background-color: #fff;
+    min-height: 100px;
+    width: 100%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  
+    .toolbar {
+      display: flex;
+      align-items: center;
+      padding: 16px;
+      height: 100%;
+    }
+  
+    .title-container {
+      flex-grow: 1;
+      text-align: start;
+  
+      .title {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #000;
+        margin: 0;
+      }
+    }
+  
+    .language-toggle {
+      margin: 0 16px;
+  
+      .language-button {
+        background: none;
+        border: none;
+        color: #1976d2;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        font-size: 1rem;
+        text-transform: none;
+        padding: 8px;
+  
+        &:hover {
+          background-color: rgba(25, 118, 210, 0.04);
+        }
+  
+        .language-icon {
+          margin-right: 8px;
+        }
+      }
+    }
+  
+    .profile-menu {
+      position: relative;
+  
+      .tooltip-container {
+        display: inline-block;
+      }
+  
+      .avatar-button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 8px;
+  
+        .avatar {
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          background-color: #f5f5f5;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+  
+          .avatar-icon {
+            font-size: 2rem;
+            color: #757575;
+          }
+        }
+      }
+  
+      .menu-container {
+        position: absolute;
+        right: 0;
+        top: 100%;
+        z-index: 1000;
+  
+        .menu {
+          background-color: #fff;
+          border-radius: 4px;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+          min-width: 180px;
+          padding: 8px 0;
+  
+          .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+  
+            &:hover {
+              background-color: rgba(0, 0, 0, 0.04);
+            }
+  
+            .logout-icon {
+              margin-right: 8px;
+              color: #d32f2f;
+            }
+          }
+        }
+      }
+    }
+  }
+  
+  .dialog-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+  
+    .dialog-container {
+      background-color: #fff;
+      border-radius: 4px;
+      box-shadow: 0 11px 15px -7px rgba(0, 0, 0, 0.2);
+      width: 400px;
+      max-width: 90%;
+  
+      .dialog-title {
+        padding: 16px 24px;
+        font-size: 1.25rem;
+        font-weight: 500;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+      }
+  
+      .dialog-content {
+        padding: 20px 24px;
+  
+        p {
+          margin: 0;
+          color: rgba(0, 0, 0, 0.6);
+        }
+      }
+  
+      .dialog-actions {
+        display: flex;
+        justify-content: flex-end;
+        padding: 8px 16px;
+        border-top: 1px solid rgba(0, 0, 0, 0.12);
+  
+        .dialog-button {
+          padding: 8px 16px;
+          margin-left: 8px;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+          text-transform: uppercase;
+          font-weight: 500;
+          font-size: 0.875rem;
+          min-width: 64px;
+  
+          &:hover {
+            background-color: rgba(0, 0, 0, 0.04);
+          }
+  
+          &.confirm {
+            background-color: #d32f2f;
+            color: white;
+  
+            &:hover {
+              background-color: #b71c1c;
+            }
+          }
+        }
+      }
+    }
+  }

@@ -1,14 +1,17 @@
 import { ReactNode } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 
 interface RouteGuardProps {
   children: ReactNode;
-  isAuthenticated: boolean; // or any condition to protect the route
+  isAuthenticated: boolean;
 }
 
 const RouteGuard: React.FC<RouteGuardProps> = ({ children, isAuthenticated }) => {
+  const location = useLocation();
+
   if (!isAuthenticated) {
-    return <Navigate to="/" replace />;
+    // Save the attempted location for potential redirect after login
+    return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
   return <>{children}</>;

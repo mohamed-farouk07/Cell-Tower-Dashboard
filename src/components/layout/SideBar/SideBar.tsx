@@ -1,147 +1,89 @@
-import React, { useEffect, useState } from "react";
-import {
-  Box,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-  Tooltip,
-} from "@mui/material";
-import GroupIcon from "@mui/icons-material/Group";
-import SpeedIcon from "@mui/icons-material/Speed";
-import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
-import DescriptionIcon from "@mui/icons-material/Description";
-import SettingsIcon from "@mui/icons-material/Settings";
-import LayersIcon from "@mui/icons-material/Layers";
-import SupportAgentIcon from "@mui/icons-material/SupportAgent";
-import DynamicFormIcon from "@mui/icons-material/DynamicForm";
-import MenuIcon from "@mui/icons-material/Menu";
+import React from "react";
+import { FaBars } from "react-icons/fa";
+import { MdDashboard } from "react-icons/md";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import "../../../styles/SideBar.scss";
+
+const DashboardIcon = React.memo(() => <MdDashboard />);
+const BarsIcon = React.memo(() => <FaBars />);
 
 interface SideBarProps {
   isCollapsed: boolean;
   setIsCollapsed: (isCollapsed: boolean) => void;
+  currentLanguage: string;
+  isMobile: boolean;
 }
 
-const SideBar = React.memo(({ isCollapsed, setIsCollapsed }: SideBarProps) => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const { t, i18n } = useTranslation();
-  const [activePath, setActivePath] = useState(location.pathname);
+const SideBar: React.FC<SideBarProps> = React.memo(
+  ({ isCollapsed, setIsCollapsed, currentLanguage, isMobile }) => {
+    const navigate = useNavigate();
+    const location = useLocation();
+    const { t } = useTranslation();
+    const [activePath, setActivePath] = React.useState(location.pathname);
 
-  useEffect(() => {
-    document.documentElement.dir = i18n.language === "ar" ? "rtl" : "ltr";
-  }, [i18n.language]);
+    React.useEffect(() => {
+      setActivePath(location.pathname);
+    }, [location.pathname]);
 
-  useEffect(() => {
-    setActivePath(location.pathname);
-  }, [location.pathname]);
+    const menuItems = React.useMemo(
+      () => [
+        { label: t("dashboard"), icon: <DashboardIcon />, path: "/dashboard" },
+      ],
+      [t, currentLanguage]
+    );
 
-  const menuItems = [
-    { label: t("users"), icon: <GroupIcon />, path: "/users" },
-    { label: t("severities"), icon: <SpeedIcon />, path: "/severities" },
-    { label: t("roles"), icon: <ManageAccountsIcon />, path: "/roles" },
-    { label: t("projects"), icon: <DescriptionIcon />, path: "/projects" },
-    { label: t("categories"), icon: <LayersIcon />, path: "/categories" },
-    {
-      label: t("configurations"),
-      icon: <SettingsIcon />,
-      path: "/configurations",
-    },
-    { label: t("records"), icon: <SupportAgentIcon />, path: "/records" },
-    {
-      label: t("evaluationForms"),
-      icon: <DynamicFormIcon />,
-      path: "/evaluation-form",
-    },
-  ];
+    const handleNavigate = React.useCallback((path: string) => {
+      navigate(path);
+    }, [navigate]);
 
-  return (
-    <Box
-      className="sidebar-background"
-      sx={{
-        position: "fixed",
-        top: "105px",
-        left: 0,
-        zIndex: 40,
-        height: "calc(100vh - 105px)",
-        width: isCollapsed ? "60px" : "240px",
-        overflow: "hidden",
-        boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
-        backgroundColor: activePath ? "rgba(0, 0, 0, 0.8)" : "rgba(0, 0, 0, 1)",
-      }}
-    >
-      {/* Toggle Button */}
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: isCollapsed ? "center" : "flex-end",
-          padding: "10px",
-          cursor: "pointer",
-        }}
-        onClick={() => setIsCollapsed(!isCollapsed)}
+    const handleToggle = React.useCallback(() => {
+      setIsCollapsed(!isCollapsed);
+    }, [isCollapsed, setIsCollapsed]);
+
+    const isActive = React.useCallback(
+      (path: string) => activePath === path,
+      [activePath]
+    );
+
+    // On mobile, sidebar is always collapsed and toggle is hidden
+    const showToggle = !isMobile;
+    const sidebarCollapsed = isMobile ? true : isCollapsed;
+
+    return (
+      <div
+        className={`sidebar sidebar-background ${sidebarCollapsed ? "collapsed" : ""} ${
+          currentLanguage === "ar" ? "rtl" : "ltr"
+        }`}
+        dir={currentLanguage === "ar" ? "rtl" : "ltr"}
       >
-        <MenuIcon sx={{ color: "#fff" }} />
-      </Box>
+        <div className="sidebar-header">
+          {!sidebarCollapsed && <span className="sidebar-title"></span>}
+          {showToggle && (
+            <div className="sidebar-toggle" onClick={handleToggle}>
+              <BarsIcon />
+            </div>
+          )}
+        </div>
 
-      {/* Menu Items */}
-      <Box
-        sx={{
-          mt: 0,
-          overflowY: "auto",
-          height: "100%",
-          paddingTop: 2,
-          "::-webkit-scrollbar": { display: "none" },
-        }}
-      >
-        <List>
+        <ul className="sidebar-menu">
           {menuItems.map((item, index) => (
-            <ListItem key={index} disablePadding sx={{ marginY: "10px" }}>
-              <Tooltip title={isCollapsed ? item.label : ""} placement="right">
-                <ListItemButton
-                  onClick={() => navigate(item.path)}
-                  sx={{
-                    justifyContent: isCollapsed ? "center" : "flex-start",
-                    px: isCollapsed ? 2 : 3,
-                    color: "#fff",
-                    backgroundColor:
-                      activePath === item.path
-                        ? "rgba(255, 255, 255, 0.2)"
-                        : "transparent",
-                    "&:hover": {
-                      backgroundColor: "rgba(255, 255, 255, 0.1)",
-                    },
-                  }}
-                >
-                  <ListItemIcon
-                    sx={{
-                      color: "#fff",
-                      fontSize: "20px",
-                      justifyContent: "center",
-                    }}
-                  >
-                    {item.icon}
-                  </ListItemIcon>
-                  {!isCollapsed && (
-                    <ListItemText
-                      primary={item.label}
-                      slotProps={{
-                        primary: {
-                          sx: { fontSize: "14px", fontWeight: "bold" },
-                        },
-                      }}
-                    />
-                  )}
-                </ListItemButton>
-              </Tooltip>
-            </ListItem>
+            <li
+              key={index}
+              className={`sidebar-item ${isActive(item.path) ? "active" : ""}`}
+              onClick={() => handleNavigate(item.path)}
+              title={sidebarCollapsed ? item.label : ""}
+            >
+              <span className="sidebar-icon">{item.icon}</span>
+              {!sidebarCollapsed && (
+                <span className="sidebar-label">{item.label}</span>
+              )}
+            </li>
           ))}
-        </List>
-      </Box>
-    </Box>
-  );
-});
+        </ul>
+      </div>
+    );
+  }
+);
 
 export default SideBar;

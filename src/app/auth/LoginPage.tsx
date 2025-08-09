@@ -1,8 +1,13 @@
 import React from 'react';
+import { FiEye, FiEyeOff, FiLock } from 'react-icons/fi';
 import { useLogin } from '../../hooks/auth/useLogin';
 import '../../styles/_login.scss';
 
-const LoginPage: React.FC = () => {
+interface LoginPageProps {
+  onLoginSuccess?: () => void;
+}
+
+const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
   const {
     userName,
     password,
@@ -13,7 +18,7 @@ const LoginPage: React.FC = () => {
     setPassword,
     togglePasswordVisibility,
     handleSubmit
-  } = useLogin();
+  } = useLogin({ onLoginSuccess });
 
   return (
     <div className="login-container">
@@ -21,7 +26,6 @@ const LoginPage: React.FC = () => {
         <div className="login-heading">
           <h1 className="login-title">Login</h1>
         </div>
-
         <div className="login-form">
           <form onSubmit={handleSubmit} className="login-form-content">
             <div className="form-group">
@@ -36,7 +40,7 @@ const LoginPage: React.FC = () => {
                 disabled={isLoading}
               />
             </div>
-            
+
             <div className="form-group">
               <label htmlFor="password">Password</label>
               <div className="password-input-wrapper">
@@ -55,19 +59,19 @@ const LoginPage: React.FC = () => {
                   onClick={togglePasswordVisibility}
                   disabled={isLoading}
                 >
-                  {showPassword ? '👁️' : '🔒'}
+                  {showPassword ? <FiEye /> : <FiEyeOff />}
                 </button>
               </div>
             </div>
-            
+
             {error && <div className="error-message">{error}</div>}
-            
+
             <button
               type="submit"
               className="login-button"
               disabled={isLoading}
             >
-              {isLoading ? 'Logging in...' : 'Login'}
+              {isLoading ? 'Logging in...' : <><FiLock /> Login</>}
             </button>
           </form>
         </div>

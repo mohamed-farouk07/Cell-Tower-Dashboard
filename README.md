@@ -231,24 +231,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - Egyptian cities data for realistic mock data
 - Open source community for inspiration
 
-## 📞 Support
-
-If you have any questions or need help:
-- Create an issue in the GitHub repository
-- Email: your-email@example.com
-- Documentation: [Project Wiki](https://github.com/mohamed-farouk07/Cell-Tower-Dashboard)
-- Live: [Project Wiki](https://mohamed-farouk07.github.io/Cell-Tower-Dashboard/#/login)
-
-## 🔮 Roadmap
-
-### Version 2.0 (Planned)
-- [ ] Real API integration
-- [ ] WebSocket for real-time updates
-- [ ] Advanced filtering options
-- [ ] Export functionality (PDF/Excel)
-- [ ] User management system
-- [ ] Notification system
-- [ ] Progressive Web App features
 
 ---
 

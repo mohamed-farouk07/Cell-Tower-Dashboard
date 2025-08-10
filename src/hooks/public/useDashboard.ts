@@ -1,20 +1,22 @@
 import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { CellTower, DashboardSummary } from "../../types/dashboard";
 
 export const useTowerData = () => {
-  // Mock data - 12 towers across 4 cities
-  const towers: CellTower[] = [
+  const { t } = useTranslation();
+  
+  const towers: CellTower[] = useMemo(() => [
     {
       id: "1",
-      name: "Cairo Tower 1",
+      name: `${t("cairo")} ${t("tower")} 1`,
       city: "Cairo",
       networkType: "5G",
       status: "active",
       signalStrength: 5,
     },
     {
-      id: "2",
-      name: "Cairo Tower 2",
+      id: "2", 
+      name: `${t("cairo")} ${t("tower")} 2`,
       city: "Cairo",
       networkType: "4G",
       status: "active",
@@ -22,15 +24,15 @@ export const useTowerData = () => {
     },
     {
       id: "3",
-      name: "Cairo Tower 3",
+      name: `${t("cairo")} ${t("tower")} 3`,
       city: "Cairo",
-      networkType: "5G",
+      networkType: "5G", 
       status: "offline",
       signalStrength: 2,
     },
     {
       id: "4",
-      name: "Alexandria Tower 1",
+      name: `${t("alexandria")} ${t("tower")} 1`,
       city: "Alexandria",
       networkType: "4G",
       status: "active",
@@ -38,7 +40,7 @@ export const useTowerData = () => {
     },
     {
       id: "5",
-      name: "Alexandria Tower 2",
+      name: `${t("alexandria")} ${t("tower")} 2`,
       city: "Alexandria",
       networkType: "5G",
       status: "active",
@@ -46,7 +48,7 @@ export const useTowerData = () => {
     },
     {
       id: "6",
-      name: "Alexandria Tower 3",
+      name: `${t("alexandria")} ${t("tower")} 3`,
       city: "Alexandria",
       networkType: "4G",
       status: "offline",
@@ -54,15 +56,15 @@ export const useTowerData = () => {
     },
     {
       id: "7",
-      name: "Hurghada Tower 1",
+      name: `${t("hurghada")} ${t("tower")} 1`,
       city: "Hurghada",
       networkType: "5G",
-      status: "active",
+      status: "active", 
       signalStrength: 4,
     },
     {
       id: "8",
-      name: "Hurghada Tower 2",
+      name: `${t("hurghada")} ${t("tower")} 2`,
       city: "Hurghada",
       networkType: "4G",
       status: "active",
@@ -70,7 +72,7 @@ export const useTowerData = () => {
     },
     {
       id: "9",
-      name: "Hurghada Tower 3",
+      name: `${t("hurghada")} ${t("tower")} 3`,
       city: "Hurghada",
       networkType: "5G",
       status: "offline",
@@ -78,7 +80,7 @@ export const useTowerData = () => {
     },
     {
       id: "10",
-      name: "Luxor Tower 1",
+      name: `${t("luxor")} ${t("tower")} 1`,
       city: "Luxor",
       networkType: "4G",
       status: "active",
@@ -86,7 +88,7 @@ export const useTowerData = () => {
     },
     {
       id: "11",
-      name: "Luxor Tower 2",
+      name: `${t("luxor")} ${t("tower")} 2`,
       city: "Luxor",
       networkType: "5G",
       status: "offline",
@@ -94,13 +96,13 @@ export const useTowerData = () => {
     },
     {
       id: "12",
-      name: "Luxor Tower 3",
+      name: `${t("luxor")} ${t("tower")} 3`,
       city: "Luxor",
       networkType: "4G",
       status: "offline",
       signalStrength: 1,
     },
-  ];
+  ], [t]);
 
   return towers;
 };
